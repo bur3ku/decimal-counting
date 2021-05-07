@@ -1,0 +1,12 @@
+{
+  "name": "decimal-counting",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "https://github.com/bur3ku/decimal-counting.git",
+  "author": "Blake Allen",
+  "license": "WTFPL",
+  "private": false,
+  "dependencies": {
+    "discord.js": "^12.5.3"
+  }
+}
