@@ -1,28 +1,45 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, undergoingMaintenance } = require('./config.json');
 
 const client = new Discord.Client();
+
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter((file)=>file.endsWith(".js") || file.endsWith(".ts"));
+const publicCommandFiles = fs.readdirSync('./commands/public').filter((file)=>file.endsWith(".js") || file.endsWith(".ts"));
+const managementCommandFiles = fs.readdirSync('./commands/management').filter((file)=>file.endsWith(".js") || file.endsWith(".ts"));
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+for (const file of publicCommandFiles) {
+	const command = require(`./commands/public/${file}`);
+	client.commands.set(command.name, command);
+}
+
+for (const file of managementCommandFiles) {
+	const command = require(`./commands/management/${file}`);
 	client.commands.set(command.name, command);
 }
 
 client.once('ready', () => {
 	console.log('client is ready!');
 });
-
+//message.channel.name !== "🔢-decimal-counting" || 
 client.on("message", ((message) => {
-  if(message.channel.name !== "🔢-decimal-counting" || !message.content.startsWith(prefix) || message.author.bot) return;
+  if(!message.content.startsWith(prefix) || message.author.bot) return;
+	if(undergoingMaintenance && message.member.guild.name !== "bur3ku's server") return message.channel.send("bot is under maintenance");
+
   const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	if(!commandName) return message.reply(`you invoked me (the decimal-counting bot), but didn't tell me what to do!`);
+	if(!commandName) return;
 
+	let commandsList = "";
+	client.commands.forEach((command)=>{
+		commandsList += command.name + ":" + command.description + "\n";
+	})
+
+	if(commandName === "commands"){
+		return message.channel.send(`Commands: \n${commandsList}`)
+	}
   const command = client.commands.get(commandName);
 
 	if(!command) return message.reply(`That's not a command`);
