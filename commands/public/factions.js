@@ -4,12 +4,12 @@ const factions = {
   args: false,
 	execute(message, args) {
 		return message.channel.send(`
-    Loyalists: Each message should include the number that is equal to the number of total messages on the channel. Conversation should be appended to messages. Ex. on the 123rd channel message: “123 hey guys how’s it goin”
-    \nRebels: Conversations can happen without counting. Each count should increment the last. If someone messes up, correct them. But if they aren’t corrected, so be it, just continue on.
-    \nNihilists: Each message should increment the last. Mistakes are completely ignored.
-    \nRedeoer/Nihilist: The count starts over from 1 when capslpop proposed to. Ther redoers are the only faction that follow the nihilist philosophy, which 
-    \nCompromisers: Each message should include the loyalist, rebel, and redoer counts. Ex. “4 / 2010 / 2223”
-        `);
+-Loyalists go by the total channel message count.
+-Rebels reject the total message count. They go by the last rebel count (in other words, the just increment each other's counts, ignoring the other faction counts)
+-Nihilists restarted the message count from 1 a while ago because they didn’t care enough to deal with the battle between the loyalists and rebels. They go by the last nihilist count.
+-Eccentrics restarted with the nihilists, but they base the count on the number of messages since the restart.
+-Peacekeepers include the counts of all factions, in the form of "loyalist count / rebel count / nihilist count / eccentric count"
+    `).then((msg)=>msg.delete({timeout:5000}));
 	}
 }
 

@@ -3,9 +3,7 @@ const ping = {
 	description: 'ping',
   args: false,
 	execute(message, args) {
-		return message.channel.send(`pong`).catch(error =>
-      console.log(error)
-    );
+		message.channel.send(`pong`).then((msg)=>msg.delete({timeout:1000}));
 	}
 }
 
